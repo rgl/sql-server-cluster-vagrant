@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>18</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>342</x>
+      <y>432</y>
+      <w>234</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;database client&gt;&gt;
+client</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>558</x>
+      <y>450</y>
+      <w>108</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-(</panel_attributes>
+    <additional_attributes>10.0;20.0;30.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>450</y>
+      <w>252</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=()-
+r1=&lt;&lt;tds&gt;&gt;
+m1=:1433</panel_attributes>
+    <additional_attributes>10.0;20.0;120.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>846</x>
+      <y>432</y>
+      <w>396</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;availability group listener&gt;&gt;
+sql</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>774</x>
+      <y>90</y>
+      <w>1764</w>
+      <h>738</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;windows failover cluster&gt;&gt;
+lt=..
+sql-cluster</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>810</x>
+      <y>360</y>
+      <w>1350</w>
+      <h>234</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;always on availability group&gt;&gt;
+lt=..
+layer=0</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1836</x>
+      <y>270</y>
+      <w>252</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;service&gt;&gt;
+sql server</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1350</x>
+      <y>432</y>
+      <w>180</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;database&gt;&gt;
+&lt;&lt;primary&gt;&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1314</x>
+      <y>270</y>
+      <w>252</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;service&gt;&gt;
+sql server</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1872</x>
+      <y>432</y>
+      <w>180</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;database&gt;&gt;
+&lt;&lt;replica&gt;&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1512</x>
+      <y>450</y>
+      <w>180</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-(
+</panel_attributes>
+    <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1224</x>
+      <y>468</y>
+      <w>162</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2232</x>
+      <y>270</y>
+      <w>234</w>
+      <h>486</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;smb share&gt;&gt;
+windows failover
+cluster
+quorum witness</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1656</x>
+      <y>468</y>
+      <w>252</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=()-
+m1=:5020</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1836</x>
+      <y>666</y>
+      <w>252</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;directory&gt;&gt;
+data</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1944</x>
+      <y>540</y>
+      <w>54</w>
+      <h>162</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1314</x>
+      <y>666</y>
+      <w>252</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;directory&gt;&gt;
+data</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1422</x>
+      <y>540</y>
+      <w>54</w>
+      <h>162</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1278</x>
+      <y>180</y>
+      <w>324</w>
+      <h>612</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;node&gt;&gt;
+sql1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1800</x>
+      <y>180</y>
+      <w>324</w>
+      <h>612</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;node&gt;&gt;
+sql2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2196</x>
+      <y>180</y>
+      <w>306</w>
+      <h>612</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;node&gt;&gt;
+dc
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

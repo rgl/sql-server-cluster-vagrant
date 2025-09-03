@@ -1,3 +1,5 @@
+. ../../provision-sql-server-common.ps1
+
 # install go.
 # see https://community.chocolatey.org/packages/golang
 choco install -y golang --version 1.25.0

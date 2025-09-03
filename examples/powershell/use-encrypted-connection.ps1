@@ -4,7 +4,7 @@ $encryptOptionQuery = 'select encrypt_option from sys.dm_exec_connections where 
 
 Write-Host 'Asserting that the SQL Server connection is encrypted (Invoke-Sqlcmd; alice.doe; username/password credentials; Encrypted TCP/IP connection)...'
 $encryptOption = (Invoke-Sqlcmd `
-    -ServerInstance "$env:COMPUTERNAME,1433" `
+    -ServerInstance "$env:SQL_SERVER_INSTANCE,1433" `
     -EncryptConnection `
     -Username alice.doe `
     -Password HeyH0Password `
@@ -15,7 +15,7 @@ if ($encryptOption -ne 'TRUE') {
 
 Write-Host 'Asserting that the SQL Server connection is encrypted (SqlClient; alice.doe; username/password credentials; Encrypted TCP/IP connection)...'
 # NB you can also use TrustServerCertificate=true for testing purposes (but never do that in production).
-$encryptOption = SqlExecuteScalar "Server=$env:COMPUTERNAME,1433; Encrypt=true; User ID=alice.doe; Password=HeyH0Password; Database=master" $encryptOptionQuery
+$encryptOption = SqlExecuteScalar "Server=$env:SQL_SERVER_INSTANCE,1433; Encrypt=true; User ID=alice.doe; Password=HeyH0Password; Database=master" $encryptOptionQuery
 if ($encryptOption -ne 'TRUE') {
     throw "expecting the connection encrypt_option to be TRUE but its $encryptOption"
 }

@@ -7,6 +7,24 @@ $database = New-Object Microsoft.SqlServer.Management.Smo.Database $env:SQL_SERV
 $database.Create()
 $database.Refresh()
 
+# when SQL Server is running in Always On Availability Groups mode, add the
+# database to the availability group.
+$result = Invoke-Sqlcmd `
+    -ServerInstance $env:SQL_SERVER_INSTANCE `
+    -Query 'select name from sys.availability_groups'
+if ($result -and $result.name) {
+    $aglName = $result.name
+    $dataRootPath = "C:\sql-server-storage"
+    Write-Host "Adding the $databaseName database to the $aglName Availability Group..."
+    Invoke-Sqlcmd `
+        -ServerInstance $env:SQL_SERVER_INSTANCE `
+        -Query @"
+alter database [$databaseName] set recovery full;
+backup database [$databaseName] to disk = '$dataRootPath\Backup\$databaseName.bak' with init;
+alter availability group [$aglName] add database [$databaseName];
+"@
+}
+
 Write-Host "Creating the db_executor role in the $databaseName database..."
 $role = New-Object Microsoft.SqlServer.Management.Smo.DatabaseRole $database,'db_executor'
 $role.Create()
@@ -101,6 +119,7 @@ try {
 }
 
 # execute the GetTotalCharactersByGender stored procedure.
+Write-Host 'Executing the GetTotalCharactersByGender stored procedure...'
 'male','female' | ForEach-Object {
     $r = Invoke-Sqlcmd `
         -ServerInstance $env:SQL_SERVER_INSTANCE `

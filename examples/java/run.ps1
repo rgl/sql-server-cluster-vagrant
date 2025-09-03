@@ -1,3 +1,5 @@
+. ../../provision-sql-server-common.ps1
+
 # use the Windows Trust store (set to $false to use java cacerts).
 $useWindowsTrustStore = $true
 

@@ -85,6 +85,24 @@ New-Item -Path HKLM:Software\Policies\Microsoft\Windows\Personalization -Force `
     | New-ItemProperty -Name PersonalColors_Accent -Value '#007acc' `
     | Out-Null
 
+# configure microsoft edge.
+# see https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/hidefirstrunexperience
+# see https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/syncdisabled
+# see https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/restoreonstartup
+# see https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/restoreonstartupurls
+# see https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/homepagelocation
+# see https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/newtabpagelocation
+$edgePolicyPath = "HKLM:\SOFTWARE\Policies\Microsoft\Edge"
+if (-not (Test-Path $edgePolicyPath)) {
+    New-Item -Path $edgePolicyPath -Force | Out-Null
+}
+Set-ItemProperty -Path $edgePolicyPath -Name HideFirstRunExperience -Value 1
+Set-ItemProperty -Path $edgePolicyPath -Name SyncDisabled -Value 1
+Set-ItemProperty -Path $edgePolicyPath -Name RestoreOnStartup -Value 5
+Set-ItemProperty -Path $edgePolicyPath -Name RestoreOnStartupURLs -Value "about:blank"
+Set-ItemProperty -Path $EdgePolicyPath -Name HomepageLocation -Value "about:blank"
+Set-ItemProperty -Path $EdgePolicyPath -Name NewTabPageLocation -Value "about:blank"
+
 # add support for installing powershell modules from powershellgallery.
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
@@ -274,6 +292,9 @@ Install-ChocolateyShortcut `
     -ShortcutFilePath "$env:USERPROFILE\Desktop\Computer Certificates.lnk" `
     -TargetPath 'C:\Windows\System32\certlm.msc'
 Install-ChocolateyShortcut `
+    -ShortcutFilePath "$env:USERPROFILE\Desktop\Failover Cluster Manager.lnk" `
+    -TargetPath 'C:\Windows\System32\cluadmin.msc'
+Install-ChocolateyShortcut `
     -ShortcutFilePath "$env:USERPROFILE\Desktop\Services.lnk" `
     -TargetPath 'C:\Windows\System32\services.msc'
 # add MSYS2 shortcut to the Desktop and Start Menu.
@@ -290,9 +311,12 @@ Install-ChocolateyShortcut `
     -IconLocation C:\tools\msys64\msys2.ico `
     -WorkingDirectory '%USERPROFILE%'
 # add SQL Server Management Studio shortcut to the Desktop.
-Install-ChocolateyShortcut `
-    -ShortcutFilePath "$env:USERPROFILE\Desktop\SQL Server Management Studio.lnk" `
-    -TargetPath 'C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\Ssms.exe'
+$ssmsPath = Resolve-Path 'C:\Program Files\Microsoft SQL Server Management Studio *\Release\Common7\IDE\Ssms.exe'
+if ($ssmsPath -and (Test-Path $ssmsPath)) {
+    Install-ChocolateyShortcut `
+        -ShortcutFilePath "$env:USERPROFILE\Desktop\SQL Server Management Studio.lnk" `
+        -TargetPath $ssmsPath
+}
 '@)
 New-Item -Path HKCU:Software\Microsoft\Windows\CurrentVersion\RunOnce -Force `
     | New-ItemProperty -Name ConfigureTaskbar -Value 'PowerShell -WindowStyle Hidden -File "%TEMP%\ConfigureTaskbar.ps1"' -PropertyType ExpandString `

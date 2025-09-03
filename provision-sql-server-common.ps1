@@ -1,4 +1,66 @@
-$env:SQL_SERVER_EDITION = 'EXPRESS' # EXPRESS or DEVELOPER.
-$env:SQL_SERVER_INSTANCE_NAME = "SQL$env:SQL_SERVER_EDITION"
-$env:SQL_SERVER_INSTANCE = ".\$env:SQL_SERVER_INSTANCE_NAME"
+$env:SQL_SERVER_INSTANCE_NAME = "SQLSERVER"
+$env:SQL_SERVER_INSTANCE = "SQL\$env:SQL_SERVER_INSTANCE_NAME"
 $env:SQL_SERVER_SERVICE_NAME = "MSSQL`$$env:SQL_SERVER_INSTANCE_NAME"
+$env:SQL_SERVER_FQDN = "sql.example.test"
+
+function Get-StringSha256Hash {
+    param (
+        [string]$InputString
+    )
+    $stringBytes = [System.Text.Encoding]::UTF8.GetBytes($InputString)
+    $sha256 = [System.Security.Cryptography.SHA256]::Create()
+    $hashBytes = $sha256.ComputeHash($stringBytes)
+    $hashString = [System.BitConverter]::ToString($hashBytes) -replace '-', ''
+    return $hashString.ToLower()
+}
+
+function Get-SqlServerSetup {
+    # see https://www.microsoft.com/en-us/sql-server/sql-server-downloads
+    # see https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt?view=sql-server-ver16
+    # see https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/Microsoft/SQLServer/2022/Developer/
+    $archiveUrl = 'https://download.microsoft.com/download/c/c/9/cc9c6797-383c-4b24-8920-dc057c1de9d3/SQL2022-SSEI-Dev.exe'
+    $mediaPath = "C:\vagrant\tmp\SQLSERVER-$(Get-StringSha256Hash $archiveUrl)"
+    $setupPath = "c:\tmp\SQLSERVER-$(Get-StringSha256Hash $archiveUrl)\setup.exe"
+
+    # download setup.
+    if (!(Test-Path $setupPath)) {
+        if (!(Test-Path $mediaPath)) {
+            mkdir $mediaPath | Out-Null
+        }
+        $archiveName = Split-Path -Leaf $archiveUrl
+        $archivePath = "$mediaPath\$archiveName"
+        if (!(Test-Path $archivePath)) {
+            Write-Host "Downloading $archiveName SQL Server Bootstrap Installer..."
+            (New-Object Net.WebClient).DownloadFile($archiveUrl, $archivePath)
+        }
+        $sfxPath = "$mediaPath\SQLServer2022-DEV-x64-ENU.exe"
+        if (!(Test-Path $sfxPath)) {
+            Write-Host "Downloading SQL Server Setup..."
+            &$archivePath `
+                /ENU `
+                /LANGUAGE=en-US `
+                /ACTION=Download `
+                /MEDIAPATH="$mediaPath" `
+                /MEDIATYPE=CAB `
+                /QUIET `
+                /VERBOSE `
+                | Out-String -Stream `
+                | Out-Host
+            if ($LASTEXITCODE) {
+                throw "failed with exit code $LASTEXITCODE"
+            }
+        }
+        Write-Host "Extracting SQL Server Setup..."
+        &$sfxPath `
+            /Q `
+            /X:"$(Split-Path -Parent $setupPath)" `
+            /VERBOSE `
+            | Out-String -Stream `
+            | Out-Host
+        if ($LASTEXITCODE) {
+            throw "failed with exit code $LASTEXITCODE"
+        }
+    }
+
+    return $setupPath
+}

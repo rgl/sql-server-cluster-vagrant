@@ -1,3 +1,5 @@
+. ../../provision-sql-server-common.ps1
+
 if (!(Get-Command -ErrorAction SilentlyContinue dotnet.exe) -or !(dotnet --list-sdks)) {
     # see https://dotnet.microsoft.com/en-us/download/dotnet/8.0
     # see https://github.com/dotnet/core/blob/main/release-notes/8.0/8.0.19/8.0.19.md

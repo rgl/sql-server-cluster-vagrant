@@ -34,7 +34,7 @@ func sqlExecuteScalar(connectionString string, sqlStatement string) string {
 func main() {
 	connectionString := fmt.Sprintf(
 		"Server=%s; Port=1433; Database=master; User ID=alice.doe; Password=HeyH0Password",
-		os.Getenv("COMPUTERNAME"))
+		os.Getenv("SQL_SERVER_FQDN"))
 
 	fmt.Println("SQL Server Version:")
 	fmt.Println(sqlExecuteScalar(connectionString, "select @@version"))

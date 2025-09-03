@@ -1,3 +1,5 @@
+. ../../provision-sql-server-common.ps1
+
 # install the odbc driver.
 # NB when you change this version, you might also need to update the connection
 #    string in main.py (to a name returned by the Get-OdbcDriver cmdlet).
