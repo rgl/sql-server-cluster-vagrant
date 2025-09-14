@@ -4,6 +4,8 @@ This is an example Vagrant environment for a SQL Server Cluster installation.
 
 This deploys a [Always On Availability Groups (AG)](https://learn.microsoft.com/en-us/sql/database-engine/availability-groups/windows/overview-of-always-on-availability-groups-sql-server?view=sql-server-ver16) SQL Server Cluster.
 
+In particular, this deploys a [Contained Availability Group](https://learn.microsoft.com/en-us/sql/database-engine/availability-groups/windows/contained-availability-groups-overview?view=sql-server-ver16).
+
 The major components are:
 
 ![](diagram.png)
@@ -93,6 +95,8 @@ Open SQL Server Management Studio.
 
 Connect to the `SQL\SQLSERVER` SQL Server.
 
+**NB** `SQL\SQLSERVER` is the Always On Contained Availability Group Listener address.
+
 Execute the following example queries.
 
 ## Always On Availability Groups status
@@ -131,8 +135,11 @@ from
 
 Show the current Always On Availability Groups endpoints permissions:
 
+**NB** Connecting to the Contained Availability Group Listener does not show the
+`hadr_endpoint` endpoint, instead, you have to connect to the Primary.
+
 ```sql
-select 
+select
   e.name as endpoint_name,
   p.permission_name,
   p.state_desc,
@@ -141,7 +148,7 @@ from
   sys.server_permissions as p
   join sys.server_principals as prin
     on p.grantee_principal_id = prin.principal_id
-  join sys.endpoints as e 
+  join sys.endpoints as e
     on p.major_id = e.endpoint_id;
 ```
 

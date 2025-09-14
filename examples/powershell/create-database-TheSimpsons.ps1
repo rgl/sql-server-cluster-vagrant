@@ -2,27 +2,36 @@
 
 $databaseName = 'TheSimpsons'
 
-Write-Host "Creating the $databaseName database..."
-$database = New-Object Microsoft.SqlServer.Management.Smo.Database $env:SQL_SERVER_INSTANCE,$databaseName
-$database.Create()
-$database.Refresh()
-
-# when SQL Server is running in Always On Availability Groups mode, add the
-# database to the availability group.
+# create the database.
+# NB when SQL Server is running in Always On Availability Groups mode, add the
+#    database to the availability group.
 $result = Invoke-Sqlcmd `
-    -ServerInstance $env:SQL_SERVER_INSTANCE `
+    -ServerInstance $env:SQL_SERVER_PRIMARY_INSTANCE `
     -Query 'select name from sys.availability_groups'
 if ($result -and $result.name) {
     $aglName = $result.name
     $dataRootPath = "C:\sql-server-storage"
+    Write-Host "Creating the $databaseName database..."
+    Invoke-Sqlcmd `
+        -ServerInstance $env:SQL_SERVER_PRIMARY_INSTANCE `
+        -Query @"
+create database [$databaseName] containment = partial;
+"@
     Write-Host "Adding the $databaseName database to the $aglName Availability Group..."
     Invoke-Sqlcmd `
-        -ServerInstance $env:SQL_SERVER_INSTANCE `
+        -ServerInstance $env:SQL_SERVER_PRIMARY_INSTANCE `
         -Query @"
 alter database [$databaseName] set recovery full;
 backup database [$databaseName] to disk = '$dataRootPath\Backup\$databaseName.bak' with init;
 alter availability group [$aglName] add database [$databaseName];
 "@
+    $database = New-Object Microsoft.SqlServer.Management.Smo.Database $env:SQL_SERVER_INSTANCE,$databaseName
+    $database.Refresh()
+} else {
+    Write-Host "Creating the $databaseName database..."
+    $database = New-Object Microsoft.SqlServer.Management.Smo.Database $env:SQL_SERVER_INSTANCE,$databaseName
+    $database.Create()
+    $database.Refresh()
 }
 
 Write-Host "Creating the db_executor role in the $databaseName database..."
@@ -47,9 +56,10 @@ Write-Host 'Creating databases users and assigning roles...'
 
     $userRoles | ForEach-Object {
         Write-Host "Adding the $userName user to the $_ database role..."
-        $role = $database.Roles[$_]
-        $role.AddMember($userName)
-        $role.Alter()
+        Invoke-Sqlcmd `
+            -ServerInstance $env:SQL_SERVER_INSTANCE `
+            -Database $databaseName `
+            -Query "alter role [$_] add member [$userName]"
     }
 }
 

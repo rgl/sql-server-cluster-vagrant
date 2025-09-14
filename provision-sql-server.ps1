@@ -152,50 +152,6 @@ $login = New-Object Microsoft.SqlServer.Management.Smo.Login($server, "$netbiosD
 $login.LoginType = [Microsoft.SqlServer.Management.Smo.LoginType]::WindowsUser
 $login.Create()
 
-# create the test users.
-$testUsers = @(
-    'alice.doe'
-    'bob.doe'
-    'carol.doe'
-    'dave.doe'
-    'eve.doe'
-)
-# create SQL Server accounts.
-$testUsersSidsPath = 'C:\vagrant\tmp\test-users-sids.json'
-$testUsersSids = if ($action -eq 'create') {
-    @{}
-} else {
-    $data = @{}
-    (Get-Content -Raw $testUsersSidsPath | ConvertFrom-Json).PSObject.Properties | ForEach-Object {
-        $data[$_.Name] = $_.Value
-    }
-    $data
-}
-$testUsers | ForEach-Object {
-    Write-Host "Creating the $_ SQL Server login..."
-    $login = New-Object Microsoft.SqlServer.Management.Smo.Login "$env:COMPUTERNAME\$env:SQL_SERVER_INSTANCE_NAME",$_
-    $login.LoginType = 'SqlLogin'
-    $login.PasswordPolicyEnforced = $false
-    $login.PasswordExpirationEnabled = $false
-    if ($action -ne 'create') {
-        $login.Sid = $testUsersSids[$_]
-    }
-    $login.Create('HeyH0Password')
-    if ($action -eq 'create') {
-        $testUsersSids[$_] = $login.Sid
-    }
-}
-if ($action -eq 'create') {
-    Set-Content `
-        $testUsersSidsPath `
-        ($testUsersSids | ConvertTo-Json -Compress -Depth 10)
-}
-# grant sysadmin permissions to alice.doe.
-$server = New-Object Microsoft.SqlServer.Management.Smo.Server "$env:COMPUTERNAME\$env:SQL_SERVER_INSTANCE_NAME"
-$sysadminRole = $server.Roles['sysadmin']
-$sysadminRole.AddMember('alice.doe')
-$sysadminRole.Alter()
-
 Write-Host 'SQL Server Version:'
 $versionResult = Invoke-Sqlcmd `
     -ServerInstance "$env:COMPUTERNAME\$env:SQL_SERVER_INSTANCE_NAME" `
@@ -266,6 +222,7 @@ if ($action -eq 'create') {
     New-SqlAvailabilityGroup `
         -Path "SQLSERVER:\SQL\$env:COMPUTERNAME\$env:SQL_SERVER_INSTANCE_NAME" `
         -Name $aglName `
+        -ContainedAvailabilityGroup `
         -AvailabilityReplica @($primaryReplica, $secondaryReplica) `
         | Out-Null
 } else {
@@ -293,4 +250,39 @@ if ($action -eq 'create') {
         -StaticIp "$aglIpAddress/255.255.255.0" `
         -Port 1433 `
         | Out-Null
+}
+
+# enabling contained database authentication.
+Write-Host "Enabling contained database authentication..."
+Invoke-Sqlcmd `
+    -ServerInstance "$env:COMPUTERNAME\$env:SQL_SERVER_INSTANCE_NAME" `
+    -Query @"
+exec sp_configure 'contained database authentication', 1;
+reconfigure;
+"@
+
+# create the test users.
+# NB these are only created in the contained availability group.
+if ($action -eq 'create') {
+    $testUsers = @(
+        'alice.doe'
+        'bob.doe'
+        'carol.doe'
+        'dave.doe'
+        'eve.doe'
+    )
+    # create SQL Server accounts.
+    $testUsers | ForEach-Object {
+        Write-Host "Creating the $_ SQL Server login..."
+        $login = New-Object Microsoft.SqlServer.Management.Smo.Login $env:SQL_SERVER_INSTANCE,$_
+        $login.LoginType = 'SqlLogin'
+        $login.PasswordPolicyEnforced = $false
+        $login.PasswordExpirationEnabled = $false
+        $login.Create('HeyH0Password')
+    }
+    # grant sysadmin permissions to alice.doe.
+    $server = New-Object Microsoft.SqlServer.Management.Smo.Server $env:SQL_SERVER_INSTANCE
+    $sysadminRole = $server.Roles['sysadmin']
+    $sysadminRole.AddMember('alice.doe')
+    $sysadminRole.Alter()
 }
