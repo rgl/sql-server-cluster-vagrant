@@ -33,7 +33,7 @@ function Get-SqlServerSetup {
             Write-Host "Downloading $archiveName SQL Server Bootstrap Installer..."
             (New-Object Net.WebClient).DownloadFile($archiveUrl, $archivePath)
         }
-        $sfxPath = "$mediaPath\SQLServer2022-DEV-x64-ENU.exe"
+        $sfxPath = "$mediaPath\SQL*ENU.exe"
         if (!(Test-Path $sfxPath)) {
             Write-Host "Downloading SQL Server Setup..."
             &$archivePath `
