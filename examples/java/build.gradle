@@ -1,5 +1,5 @@
-// see https://docs.gradle.org/9.0.0/userguide/java_plugin.html
-// see https://docs.gradle.org/9.0.0/userguide/application_plugin.html
+// see https://docs.gradle.org/9.1.0/userguide/java_plugin.html
+// see https://docs.gradle.org/9.1.0/userguide/application_plugin.html
 // see https://gradleup.com/shadow/
 // see https://github.com/GradleUp/shadow
 
@@ -15,8 +15,8 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
