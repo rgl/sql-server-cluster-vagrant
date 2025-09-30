@@ -4,7 +4,7 @@ ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 
 DC_DOMAIN               = "example.test"
 DC_IP_ADDRESS           = "10.20.20.10"
-SQL_FC_NAME             = "SQL-CLUSTER"
+SQL_FC_NAME             = "SQLC"
 SQL_FC_IP_ADDRESS       = "10.20.20.100"
 SQL1_IP_ADDRESS         = "10.20.20.11"
 SQL2_IP_ADDRESS         = "10.20.20.12"

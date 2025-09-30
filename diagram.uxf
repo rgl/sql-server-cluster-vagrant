@@ -59,7 +59,7 @@ sql</panel_attributes>
     </coordinates>
     <panel_attributes>&lt;&lt;windows failover cluster&gt;&gt;
 lt=..
-sql-cluster</panel_attributes>
+sqlc</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

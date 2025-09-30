@@ -5,7 +5,7 @@ param(
 $shareName = "fc-storage-${clusterName}"
 $sharePath = "C:\$shareName"
 # TODO limit this to the windows failover cluster computer account (e.g.
-#      SQL-CLUSTER$). that is, do not let every computer create a folder in
+#      SQLC$). that is, do not let every computer create a folder in
 #      this directory.
 $accounts = @(
     "Domain Computers"

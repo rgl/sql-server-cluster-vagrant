@@ -14,11 +14,11 @@ This environment scripts will:
 
 * Create the `DC` Windows Domain Controller (DC).
   * Host the `example.test` domain Active Directory (AD) site.
-  * Host the `fc-storage-SQL-CLUSTER` SMB File Share for the `SQL-CLUSTER` Windows Server Failover Cluster (WSFC) quorum storage.
+  * Host the `fc-storage-SQLC` SMB File Share for the `SQLC` Windows Server Failover Cluster (WSFC) quorum storage.
   * Host the SQL Server Management Studio application.
   * Create the `SQL Server Administrators` AD group.
     * Add the `vagrant` account as member.
-* Create the `SQL-CLUSTER` Windows Server Failover Cluster (WSFC).
+* Create the `SQLC` Windows Server Failover Cluster (WSFC).
 * Create the `SQL` SQL Server Always On Availability Group cluster between the `SQL1` and `SQL2` nodes.
   * Grant the `SQL Server Administrators` AD group the SQL Server `sysdamin` role.
 * Change the SQL Server Settings.

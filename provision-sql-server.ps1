@@ -1,6 +1,6 @@
 param(
     [string]$domain='example.test',
-    [string]$fcName='SQL-CLUSTER',
+    [string]$fcName='SQLC',
     [string]$action,
     [string]$aglName='SQL',
     [string]$aglIpAddress='10.20.20.101'
