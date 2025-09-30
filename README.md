@@ -36,6 +36,70 @@ This environment scripts will:
     * `eve.doe` in the `db_datareader` and `db_executor` roles.
 * Show how to run the PowerShell, Python, Java, C# and Go [examples](examples/).
 
+<details><summary>After everything is provisioned, these are the existing Windows Domain Accounts Service Principals: (click to toggle table)</summary>
+
+| Account Distinguished Name                     | Service Principal Name                                                                 |
+|------------------------------------------------|----------------------------------------------------------------------------------------|
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | Dfsr-12F9A27C-BF97-4787-9364-D31B6C55EB04/dc.example.test                              |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | DNS/dc.example.test                                                                    |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | E3514235-4B06-11D1-AB04-00C04FC2DCD2/7705c323-ca06-47d0-aeca-e9c004238b03/example.test |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | GC/dc.example.test/example.test                                                        |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | HOST/DC                                                                                |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | HOST/dc.example.test                                                                   |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | HOST/dc.example.test/EXAMPLE                                                           |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | HOST/dc.example.test/example.test                                                      |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | HOST/DC/EXAMPLE                                                                        |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | ldap/7705c323-ca06-47d0-aeca-e9c004238b03._msdcs.example.test                          |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | ldap/DC                                                                                |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | ldap/dc.example.test                                                                   |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | ldap/dc.example.test/DomainDnsZones.example.test                                       |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | ldap/dc.example.test/EXAMPLE                                                           |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | ldap/dc.example.test/example.test                                                      |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | ldap/dc.example.test/ForestDnsZones.example.test                                       |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | ldap/DC/EXAMPLE                                                                        |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | RestrictedKrbHost/DC                                                                   |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | RestrictedKrbHost/dc.example.test                                                      |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | RPC/7705c323-ca06-47d0-aeca-e9c004238b03._msdcs.example.test                           |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | TERMSRV/DC                                                                             |
+| CN=DC,OU=Domain Controllers,DC=example,DC=test | TERMSRV/dc.example.test                                                                |
+| CN=krbtgt,CN=Users,DC=example,DC=test          | kadmin/changepw                                                                        |
+| CN=SQL,CN=Computers,DC=example,DC=test         | HOST/SQL                                                                               |
+| CN=SQL,CN=Computers,DC=example,DC=test         | HOST/SQL.example.test                                                                  |
+| CN=SQL,CN=Computers,DC=example,DC=test         | MSClusterVirtualServer/SQL                                                             |
+| CN=SQL,CN=Computers,DC=example,DC=test         | MSClusterVirtualServer/SQL.example.test                                                |
+| CN=SQL,CN=Computers,DC=example,DC=test         | MSServerClusterMgmtAPI/SQL                                                             |
+| CN=SQL,CN=Computers,DC=example,DC=test         | MSServerClusterMgmtAPI/SQL.example.test                                                |
+| CN=SQL1,CN=Computers,DC=example,DC=test        | HOST/SQL1                                                                              |
+| CN=SQL1,CN=Computers,DC=example,DC=test        | HOST/SQL1.example.test                                                                 |
+| CN=SQL1,CN=Computers,DC=example,DC=test        | MSServerClusterMgmtAPI/SQL1                                                            |
+| CN=SQL1,CN=Computers,DC=example,DC=test        | MSServerClusterMgmtAPI/SQL1.example.test                                               |
+| CN=SQL1,CN=Computers,DC=example,DC=test        | RestrictedKrbHost/SQL1                                                                 |
+| CN=SQL1,CN=Computers,DC=example,DC=test        | RestrictedKrbHost/SQL1.example.test                                                    |
+| CN=SQL1,CN=Computers,DC=example,DC=test        | TERMSRV/SQL1                                                                           |
+| CN=SQL1,CN=Computers,DC=example,DC=test        | TERMSRV/SQL1.example.test                                                              |
+| CN=SQL1,CN=Computers,DC=example,DC=test        | WSMAN/SQL1                                                                             |
+| CN=SQL1,CN=Computers,DC=example,DC=test        | WSMAN/SQL1.example.test                                                                |
+| CN=SQL2,CN=Computers,DC=example,DC=test        | HOST/SQL2                                                                              |
+| CN=SQL2,CN=Computers,DC=example,DC=test        | HOST/SQL2.example.test                                                                 |
+| CN=SQL2,CN=Computers,DC=example,DC=test        | MSServerClusterMgmtAPI/SQL2                                                            |
+| CN=SQL2,CN=Computers,DC=example,DC=test        | MSServerClusterMgmtAPI/SQL2.example.test                                               |
+| CN=SQL2,CN=Computers,DC=example,DC=test        | RestrictedKrbHost/SQL2                                                                 |
+| CN=SQL2,CN=Computers,DC=example,DC=test        | RestrictedKrbHost/SQL2.example.test                                                    |
+| CN=SQL2,CN=Computers,DC=example,DC=test        | TERMSRV/SQL2                                                                           |
+| CN=SQL2,CN=Computers,DC=example,DC=test        | TERMSRV/SQL2.example.test                                                              |
+| CN=SQL2,CN=Computers,DC=example,DC=test        | WSMAN/SQL2                                                                             |
+| CN=SQL2,CN=Computers,DC=example,DC=test        | WSMAN/SQL2.example.test                                                                |
+| CN=SQLC,CN=Computers,DC=example,DC=test        | HOST/SQLC                                                                              |
+| CN=SQLC,CN=Computers,DC=example,DC=test        | HOST/SQLC.example.test                                                                 |
+| CN=SQLC,CN=Computers,DC=example,DC=test        | MSClusterVirtualServer/SQLC                                                            |
+| CN=SQLC,CN=Computers,DC=example,DC=test        | MSClusterVirtualServer/SQLC.example.test                                               |
+| CN=SQLC,CN=Computers,DC=example,DC=test        | MSServerCluster/SQLC                                                                   |
+| CN=SQLC,CN=Computers,DC=example,DC=test        | MSServerCluster/SQLC.example.test                                                      |
+| CN=SQLC,CN=Computers,DC=example,DC=test        | MSServerClusterMgmtAPI/SQLC                                                            |
+| CN=SQLC,CN=Computers,DC=example,DC=test        | MSServerClusterMgmtAPI/SQLC.example.test                                               |
+
+</details>
+
 
 # Usage
 
