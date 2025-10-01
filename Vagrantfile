@@ -59,6 +59,7 @@ Vagrant.configure("2") do |config|
       config.vm.provision "shell", path: "ps.ps1", args: ["provision-failover-cluster.ps1", i == 0 ? "create" : "join", SQL_FC_NAME, SQL_FC_IP_ADDRESS]
       config.vm.provision "shell", path: "ps.ps1", args: ["provision-sql-server.ps1", DC_DOMAIN, SQL_FC_NAME, i == 0 ? "create" : "join", SQL_CLUSTER_NAME, SQL_CLUSTER_IP_ADDRESS]
       config.vm.provision "shell", path: "ps.ps1", args: ["list-service-principals.ps1", DC_DOMAIN]
+      config.vm.provision "shell", path: "ps.ps1", args: ["examples/powershell/create-database-TheSimpsons.ps1"] if i == 0
     end
   end
 end

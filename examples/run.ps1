@@ -1,7 +1,6 @@
 @(
     'examples\powershell\sqlps.ps1'
     'examples\powershell\sqlclient.ps1'
-    'examples\powershell\create-database-TheSimpsons.ps1'
     'examples\powershell\use-encrypted-connection.ps1'
     'examples\python\run.ps1'
     'examples\java\run.ps1'
