@@ -11,7 +11,7 @@ choco install -y gradle --version 9.1.0
 
 # install the SQL Server JDBC Auth driver.
 # see https://github.com/Microsoft/mssql-jdbc
-$archiveVersion = '13.2.0'
+$archiveVersion = '13.2.1'
 $archiveUrl = "https://github.com/microsoft/mssql-jdbc/releases/download/v$archiveVersion/mssql-jdbc_auth.zip"
 $archivePath = "$env:TEMP\mssql-jdbc_auth-$archiveVersion.zip"
 if (Test-Path $archivePath) {

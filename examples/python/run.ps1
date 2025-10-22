@@ -13,7 +13,7 @@ Get-OdbcDriver -Platform '64-bit' `
 
 # install python.
 # see https://community.chocolatey.org/packages/python
-choco install -y python --version 3.13.7
+choco install -y python --version 3.13.9
 
 # update $env:PATH with the recently installed Chocolatey packages.
 Import-Module C:\ProgramData\chocolatey\helpers\chocolateyInstaller.psm1
