@@ -196,7 +196,7 @@ Show the current Always On Availability Groups replication status:
 select
   ag.name as [ag_name],
   ar.replica_server_name,
-  db_name(ds.database_id) as [database],
+  db_name(ds.database_id) as [database_name],
   ds.synchronization_state_desc,
   ds.synchronization_health_desc
 from
@@ -205,6 +205,26 @@ from
     on ds.replica_id = ar.replica_id
   inner join sys.availability_groups as ag
     on ar.group_id = ag.group_id;
+```
+
+Show the automatic seeding events:
+
+```sql
+select
+  has.start_time,
+  has.completion_time,
+  ag.name as [ag_name],
+  adc.database_name,
+  has.current_state,
+  has.performed_seeding,
+  has.failure_state,
+  has.failure_state_desc
+from
+  sys.dm_hadr_automatic_seeding as has 
+  inner join sys.availability_databases_cluster as adc 
+    on has.ag_db_id = adc.group_database_id
+  inner join sys.availability_groups as ag 
+    on has.ag_id = ag.group_id;
 ```
 
 Show the current Always On Availability Groups endpoints permissions:
@@ -220,9 +240,9 @@ select
   prin.name as grantee_name
 from
   sys.server_permissions as p
-  join sys.server_principals as prin
+  inner join sys.server_principals as prin
     on p.grantee_principal_id = prin.principal_id
-  join sys.endpoints as e
+  inner join sys.endpoints as e
     on p.major_id = e.endpoint_id;
 ```
 
