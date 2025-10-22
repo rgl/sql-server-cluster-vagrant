@@ -145,6 +145,16 @@ echo | openssl s_client -connect sql.example.test:1433 -servername sql.example.t
 
 Execute the [example queries](#example-queries).
 
+Execute the pinger example application:
+
+```powershell
+$env:SQL_SERVER_FQDN = 'sql.example.test'
+C:\pinger\pinger.exe
+```
+
+Then play with the Sql Server failover (e.g. stop the `sql1` machine), and see
+how the pinger application fails while the Sql Server failover is happening.
+
 
 # Reference
 

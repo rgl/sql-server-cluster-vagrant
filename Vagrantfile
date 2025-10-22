@@ -43,6 +43,7 @@ Vagrant.configure("2") do |config|
     config.vm.provision "shell", path: "ps.ps1", args: "provision-certificate.ps1"
     config.vm.provision "shell", path: "ps.ps1", args: ["provision-failover-cluster-storage-share.ps1", SQL_FC_NAME]
     config.vm.provision "shell", path: "ps.ps1", args: "provision-sql-server-management-studio.ps1"
+    config.vm.provision "shell", path: "ps.ps1", args: "examples/pinger/install.ps1"
   end
 
   SQL_IP_ADDRESSES.each_with_index do |ip_address, i|
