@@ -55,9 +55,9 @@ $setupPath = Get-SqlServerSetup
 #    e.g. "C:\Program Files\Microsoft SQL Server\160\Setup Bootstrap\Log"
 # NB you could also use /INDICATEPROGRESS to make the setup write the logs to
 #    stdout in realtime.
-# see https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt?view=sql-server-ver16#integrated-install-failover-cluster-parameters
-# see https://learn.microsoft.com/en-us/sql/sql-server/failover-clusters/install/create-a-new-sql-server-failover-cluster-setup?view=sql-server-ver16
-# see https://learn.microsoft.com/en-us/sql/database-engine/availability-groups/windows/create-an-availability-group-sql-server-powershell?
+# see https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt?view=sql-server-ver17#integrated-install-failover-cluster-parameters
+# see https://learn.microsoft.com/en-us/sql/sql-server/failover-clusters/install/create-a-new-sql-server-failover-cluster-setup?view=sql-server-ver17
+# see https://learn.microsoft.com/en-us/sql/database-engine/availability-groups/windows/create-an-availability-group-sql-server-powershell?view=sql-server-ver17
 Write-Host "Installing SQL Server..."
 # NB the setup data path parameters are:
 #       /INSTALLSQLDATADIR    System database directory
@@ -111,7 +111,7 @@ Start-Service -Name SQLBrowser
 # install the SqlServer PowerShell Module.
 # see https://www.powershellgallery.com/packages/Sqlserver
 # see https://learn.microsoft.com/en-us/powershell/module/sqlserver/?view=sqlserver-ps
-# see https://learn.microsoft.com/en-us/sql/powershell/download-sql-server-ps-module?view=sql-server-ver16
+# see https://learn.microsoft.com/en-us/powershell/sql-server/download-sql-server-ps-module?view=sqlserver-ps
 Write-Host "Installing the SqlServer PowerShell module..."
 Install-Module SqlServer -AllowClobber -RequiredVersion 22.4.5.1
 

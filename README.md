@@ -2,9 +2,9 @@
 
 This is an example Vagrant environment for a SQL Server Cluster installation.
 
-This deploys a [Always On Availability Groups (AG)](https://learn.microsoft.com/en-us/sql/database-engine/availability-groups/windows/overview-of-always-on-availability-groups-sql-server?view=sql-server-ver16) SQL Server Cluster.
+This deploys a [Always On Availability Groups (AG)](https://learn.microsoft.com/en-us/sql/database-engine/availability-groups/windows/overview-of-always-on-availability-groups-sql-server?view=sql-server-ver17) SQL Server Cluster.
 
-In particular, this deploys a [Contained Availability Group](https://learn.microsoft.com/en-us/sql/database-engine/availability-groups/windows/contained-availability-groups-overview?view=sql-server-ver16).
+In particular, this deploys a [Contained Availability Group](https://learn.microsoft.com/en-us/sql/database-engine/availability-groups/windows/contained-availability-groups-overview?view=sql-server-ver17).
 
 The major components are:
 
@@ -158,7 +158,7 @@ how the pinger application fails while the Sql Server failover is happening.
 
 # Reference
 
-* [TDS 8.0 and TLS 1.3 support](https://learn.microsoft.com/en-us/sql/relational-databases/security/networking/tds-8-and-tls-1-3?view=sql-server-ver16)
+* [TDS 8.0](https://learn.microsoft.com/en-us/sql/relational-databases/security/networking/tds-8?view=sql-server-ver17) and [TLS 1.3 support](https://learn.microsoft.com/en-us/sql/relational-databases/security/networking/tls-1-3?view=sql-server-ver17)
 
 
 # Example queries
