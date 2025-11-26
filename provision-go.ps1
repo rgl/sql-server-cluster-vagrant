@@ -1,7 +1,7 @@
 if (!(Get-Command -ErrorAction SilentlyContinue go)) {
     # install go.
     # see https://community.chocolatey.org/packages/golang
-    choco install -y golang --version 1.25.3
+    choco install -y golang --version 1.25.4
 
     # setup the current process environment.
     $env:GOROOT = 'C:\Program Files\Go'
