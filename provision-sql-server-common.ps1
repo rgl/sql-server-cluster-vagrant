@@ -18,7 +18,7 @@ function Get-StringSha256Hash {
 function Get-SqlServerSetup {
     # see https://www.microsoft.com/en-us/sql-server/sql-server-downloads
     # see https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt?view=sql-server-ver17
-    # see https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/Microsoft/SQLServer/2022/Developer/
+    # see https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/Microsoft/SQLServer/2025/Developer/
     $archiveUrl = 'https://download.microsoft.com/download/4ba126fc-a6a0-4810-80e9-c0182d3e1f62/SQL2025-SSEI-EntDev.exe'
     $mediaPath = "C:\vagrant\tmp\SQLSERVER-$(Get-StringSha256Hash $archiveUrl)"
     $setupPath = "c:\tmp\SQLSERVER-$(Get-StringSha256Hash $archiveUrl)\setup.exe"

@@ -108,7 +108,7 @@ Install the [Windows 2022 UEFI base box](https://github.com/rgl/windows-vagrant)
 Launch the environment with:
 
 ```bash
-vagrant up --no-destroy-on-error
+vagrant up --no-destroy-on-error | tee provision.log
 ```
 
 Login into the `DC` node as the `vagrant` domain user.
