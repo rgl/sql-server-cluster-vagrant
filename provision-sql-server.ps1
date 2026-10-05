@@ -103,7 +103,7 @@ Install-Module -Name Carbon.Cryptography -RequiredVersion 3.6.0 -Force
 # see https://learn.microsoft.com/en-us/powershell/module/sqlserver/?view=sqlserver-ps
 # see https://learn.microsoft.com/en-us/powershell/sql-server/download-sql-server-ps-module?view=sqlserver-ps
 Write-Host "Installing the SqlServer PowerShell module..."
-Install-Module SqlServer -AllowClobber -RequiredVersion 22.4.5.1
+Install-Module -Name SqlServer -RequiredVersion 22.4.5.1 -Force -AllowClobber
 
 # update $env:PSModulePath to include the modules installed by recently installed package.
 $env:PSModulePath = "$([Environment]::GetEnvironmentVariable('PSModulePath', 'User'));$([Environment]::GetEnvironmentVariable('PSModulePath', 'Machine'))"
