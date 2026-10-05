@@ -129,13 +129,13 @@ sql server</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1512</x>
-      <y>450</y>
-      <w>180</w>
-      <h>90</h>
+      <y>468</y>
+      <w>252</w>
+      <h>72</h>
     </coordinates>
-    <panel_attributes>lt=-(
-</panel_attributes>
-    <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
+    <panel_attributes>lt=-()
+m2=:5022</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -165,14 +165,14 @@ quorum witness</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1656</x>
-      <y>468</y>
-      <w>252</w>
-      <h>72</h>
+      <x>1728</x>
+      <y>450</y>
+      <w>180</w>
+      <h>90</h>
     </coordinates>
-    <panel_attributes>lt=()-
-m1=:5022</panel_attributes>
-    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+    <panel_attributes>lt=)-
+</panel_attributes>
+    <additional_attributes>20.0;20.0;80.0;20.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
