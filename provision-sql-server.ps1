@@ -92,6 +92,25 @@ if ($LASTEXITCODE) {
     throw "failed with exit code $LASTEXITCODE. see the logs at $logsPath."
 }
 
+# install the Carbon.Cryptography PowerShell module.
+# see https://www.powershellgallery.com/packages/Carbon.Cryptography
+# see https://github.com/webmd-health-services/Carbon.Cryptography
+Write-Host "Installing the Carbon.Cryptography PowerShell module..."
+Install-Module -Name Carbon.Cryptography -RequiredVersion 3.6.0 -Force
+
+# install the SqlServer PowerShell Module.
+# see https://www.powershellgallery.com/packages/Sqlserver
+# see https://learn.microsoft.com/en-us/powershell/module/sqlserver/?view=sqlserver-ps
+# see https://learn.microsoft.com/en-us/powershell/sql-server/download-sql-server-ps-module?view=sqlserver-ps
+Write-Host "Installing the SqlServer PowerShell module..."
+Install-Module SqlServer -AllowClobber -RequiredVersion 22.4.5.1
+
+# update $env:PSModulePath to include the modules installed by recently installed package.
+$env:PSModulePath = "$([Environment]::GetEnvironmentVariable('PSModulePath', 'User'));$([Environment]::GetEnvironmentVariable('PSModulePath', 'Machine'))"
+
+Import-Module Carbon.Cryptography
+Import-Module SqlServer
+
 Write-Host "Configuring the SQL Server TLS certificate..."
 PowerShell.exe -File ps.ps1 `
     provision-sql-server-network-encryption.ps1 `
@@ -107,18 +126,6 @@ if ($LASTEXITCODE) {
 Write-Host "Enabling and starting the SQL Server Browser service..."
 Set-Service -Name SQLBrowser -StartupType Automatic
 Start-Service -Name SQLBrowser
-
-# install the SqlServer PowerShell Module.
-# see https://www.powershellgallery.com/packages/Sqlserver
-# see https://learn.microsoft.com/en-us/powershell/module/sqlserver/?view=sqlserver-ps
-# see https://learn.microsoft.com/en-us/powershell/sql-server/download-sql-server-ps-module?view=sqlserver-ps
-Write-Host "Installing the SqlServer PowerShell module..."
-Install-Module SqlServer -AllowClobber -RequiredVersion 22.4.5.1
-
-# update $env:PSModulePath to include the modules installed by recently installed package.
-$env:PSModulePath = "$([Environment]::GetEnvironmentVariable('PSModulePath', 'User'));$([Environment]::GetEnvironmentVariable('PSModulePath', 'Machine'))"
-
-Import-Module SqlServer
 
 # set the tcp port.
 # NB the sql server service must be restarted for this to take effect.
