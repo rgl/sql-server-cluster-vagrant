@@ -9,7 +9,7 @@ $credential = New-Object `
 
 Invoke-Command -ComputerName DC -Credential $credential {
     function Get-AccountServicePrincipals {
-        Write-Host "Account Service Principals"
+        Write-Host "Account Service Principal Names (SPNs)"
         Get-ADObject `
             -LDAPFilter "(servicePrincipalName=*)" `
             -Properties DistinguishedName,ServicePrincipalName `

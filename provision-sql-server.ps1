@@ -46,6 +46,54 @@ New-NetFirewallRule `
     -LocalPort $mirroringEndpointPort `
     | Out-Null
 
+# set the SQL Server SPNs.
+# see https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/register-a-service-principal-name-for-kerberos-connections?view=sql-server-ver17
+# see https://learn.microsoft.com/en-us/sql/database-engine/availability-groups/windows/listeners-client-connectivity-application-failover?view=sql-server-ver17#SPNs
+if ($action -eq 'create') {
+    Write-Host "Setting the $netbiosDomain\SqlServer`$ gMSA SQL Server SPNs..."
+    @(
+        $aglName
+    ) | ForEach-Object {
+        "$_.$domain"
+    } | ForEach-Object {
+        "MSSQLSvc/${_}"
+        "MSSQLSvc/${_}:1433"
+        "MSSQLSvc/${_}:${env:SQL_SERVER_INSTANCE_NAME}"
+    } | ForEach-Object {
+        setspn -S $_ "$netbiosDomain\SqlServer`$"
+        if ($LASTEXITCODE) {
+            throw "failed with exit code $LASTEXITCODE"
+        }
+    }
+    @(
+        $primaryComputerName
+        $secondaryComputerName
+    ) | ForEach-Object {
+        "$_.$domain"
+    } | ForEach-Object {
+        "MSSQLSvc/${_}"
+        "MSSQLSvc/${_}:1433"
+        "MSSQLSvc/${_}:$mirroringEndpointPort"
+        "MSSQLSvc/${_}:${env:SQL_SERVER_INSTANCE_NAME}"
+    } | ForEach-Object {
+        setspn -S $_ "$netbiosDomain\SqlServer`$"
+        if ($LASTEXITCODE) {
+            throw "failed with exit code $LASTEXITCODE"
+        }
+    }
+}
+Write-Host "Listing the $netbiosDomain\SqlServer`$ gMSA SQL Server SPNs..."
+setspn -L "$netbiosDomain\SqlServer`$"
+if ($LASTEXITCODE) {
+    throw "failed with exit code $LASTEXITCODE"
+}
+Write-Host "Asserting there are no duplicate SPNs..."
+setspn -X
+# NB for some odd reason, setspn -X returns exit code 1 when OK.
+if ($LASTEXITCODE -ne 1) {
+    throw "failed with exit code $LASTEXITCODE"
+}
+
 # download.
 $setupPath = Get-SqlServerSetup
 
