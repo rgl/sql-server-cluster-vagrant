@@ -12,6 +12,14 @@ SQL_IP_ADDRESSES        = [SQL1_IP_ADDRESS, SQL2_IP_ADDRESS]
 SQL_CLUSTER_NAME        = "SQL" # NB this must not be the same as SQL_FC_NAME, DC_DOMAIN, or the SQL Server Instance name.
 SQL_CLUSTER_IP_ADDRESS  = "10.20.20.101"
 
+DC_ADMIN_USERNAME       = "vagrant@#{DC_DOMAIN}"
+DC_ADMIN_PASSWORD       = "vagrant"
+
+PROVISION_ENV = {
+  "DC_ADMIN_USERNAME" => DC_ADMIN_USERNAME,
+  "DC_ADMIN_PASSWORD" => DC_ADMIN_PASSWORD,
+}
+
 Vagrant.configure("2") do |config|
   config.vm.box = "windows-2022-uefi-amd64"
 
@@ -57,10 +65,10 @@ Vagrant.configure("2") do |config|
       config.vm.provision "shell", path: "ps.ps1", args: "provision-chocolatey.ps1"
       config.vm.provision "shell", path: "ps.ps1", args: "provision-base.ps1"
       config.vm.provision "shell", path: "ps.ps1", args: ["provision-certificate.ps1", "#{SQL_CLUSTER_NAME}.#{DC_DOMAIN}", SQL_CLUSTER_IP_ADDRESS, ip_address]
-      config.vm.provision "shell", path: "ps.ps1", args: ["provision-failover-cluster.ps1", i == 0 ? "create" : "join", SQL_FC_NAME, SQL_FC_IP_ADDRESS]
-      config.vm.provision "shell", path: "ps.ps1", args: ["provision-sql-server.ps1", DC_DOMAIN, SQL_FC_NAME, i == 0 ? "create" : "join", SQL_CLUSTER_NAME, SQL_CLUSTER_IP_ADDRESS]
-      config.vm.provision "shell", path: "ps.ps1", args: ["list-service-principals.ps1", DC_DOMAIN]
-      config.vm.provision "shell", path: "ps.ps1", args: ["examples/powershell/create-database-TheSimpsons.ps1"] if (i + 1) == SQL_IP_ADDRESSES.length
+      config.vm.provision "shell", path: "ps.ps1", args: ["-ExecAsDomainAdmin", "provision-failover-cluster.ps1", i == 0 ? "create" : "join", SQL_FC_NAME, SQL_FC_IP_ADDRESS], env: PROVISION_ENV
+      config.vm.provision "shell", path: "ps.ps1", args: ["-ExecAsDomainAdmin", "provision-sql-server.ps1", DC_DOMAIN, SQL_FC_NAME, i == 0 ? "create" : "join", SQL_CLUSTER_NAME, SQL_CLUSTER_IP_ADDRESS], env: PROVISION_ENV
+      config.vm.provision "shell", path: "ps.ps1", args: ["-ExecAsDomainAdmin", "list-service-principals.ps1", DC_DOMAIN], env: PROVISION_ENV
+      config.vm.provision "shell", path: "ps.ps1", args: ["-ExecAsDomainAdmin", "examples/powershell/create-database-TheSimpsons.ps1"], env: PROVISION_ENV if (i + 1) == SQL_IP_ADDRESSES.length
     end
   end
 end

@@ -159,7 +159,7 @@ code --install-extension ms-mssql.mssql
 code --install-extension ms-vscode.PowerShell
 
 # install msys2.
-choco install -y msys2
+choco install -y msys2 --params "'/NoPath'"
 
 # configure the msys2 launcher to let the shell inherith the PATH.
 $msys2BasePath = 'C:\tools\msys64'
@@ -256,6 +256,25 @@ EOF
 choco install -y conemu
 cp ConEmu.xml "$env:APPDATA\ConEmu.xml"
 reg import ConEmu.reg
+
+# install execst.
+# see https://github.com/rgl/execst/releases
+$execstVersion = '0.0.1'
+$execstUrl = "https://github.com/rgl/execst/releases/download/v$execstVersion/execst_${execstVersion}_windows_amd64v3.tar.gz"
+Write-Host "Installing execst $execstVersion from $execstUrl..."
+$execstTempPath = "$env:TEMP\execst_${execstVersion}_windows_amd64v3.tar.gz"
+curl.exe --silent --show-error --location --output $execstTempPath $execstUrl
+if ($LASTEXITCODE) {
+    throw "curl.exe failed with exit code $LASTEXITCODE"
+}
+tar.exe xzf $execstTempPath -C "$env:ChocolateyInstall\bin" execst.exe
+if ($LASTEXITCODE) {
+    throw "tar.exe failed with exit code $LASTEXITCODE"
+}
+Remove-Item -Force $execstTempPath
+if (-not (Test-Path "$env:ChocolateyInstall\bin\execst.exe")) {
+    throw "execst.exe not found in $env:ChocolateyInstall\bin"
+}
 
 # cleanup the taskbar by removing the existing icons and unpinning all applications; once the user logs on.
 # NB the shell executes these RunOnce commands about ~10s after the user logs on.

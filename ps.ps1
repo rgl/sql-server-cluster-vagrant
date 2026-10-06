@@ -2,7 +2,9 @@ param(
     [Parameter(Mandatory=$true)]
     [String]$script,
     [Parameter(ValueFromRemainingArguments=$true)]
-    [String[]]$scriptArguments
+    [String[]]$scriptArguments,
+    [Parameter(Mandatory=$false)]
+    [switch]$ExecAsDomainAdmin
 )
 
 Set-StrictMode -Version Latest
@@ -55,7 +57,46 @@ function Start-Example([string]$name, [scriptblock]$script) {
     Pop-Location
 }
 
-Set-Location c:/vagrant
+if ($ExecAsDomainAdmin) {
+    # copy the required files to c:\tmp.
+    # NB execst will execute our script as an domain admin user, which does not
+    #    have access to the c:\vagrant share, so we have to copy the files to
+    #    a location that the domain admin user can access.
+    Push-Location c:\vagrant
+    @(
+        $script
+        'ps.ps1'
+        'provision-sql-server-common.ps1'
+        'provision-sql-server-network-encryption.ps1'
+        'examples\powershell\common.ps1'
+    ) | Where-Object { -not (Test-Path "c:\tmp\$_") } | ForEach-Object {
+        $parent = Split-Path $_ -Parent
+        if ($parent) {
+            New-Item -ItemType Directory -Path "c:\tmp\$parent" -Force | Out-Null
+        }
+        Copy-Item $_ "c:\tmp\$_"
+    }
+    . c:\tmp\provision-sql-server-common.ps1
+    Get-SqlServerSetup
+    Pop-Location
+    $env:EXECST_USERNAME = $env:DC_ADMIN_USERNAME
+    $env:EXECST_PASSWORD = $env:DC_ADMIN_PASSWORD
+    execst `
+        --env EXECST=1 `
+        --workdir c:\tmp `
+        -- `
+        powershell `
+            -file ps.ps1 `
+            $script `
+            @scriptArguments
+    Exit $LASTEXITCODE
+}
+
+if ($env:EXECST -eq "1") {
+    Set-Location c:\tmp
+} else {
+    Set-Location c:\vagrant
+}
 $script = Resolve-Path $script
 Set-Location (Split-Path $script -Parent)
 Write-Host "Running $script..."
