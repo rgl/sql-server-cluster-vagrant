@@ -26,21 +26,19 @@ New-NetRoute `
 if ($action -eq "create") {
     Write-Host "Creating the $clusterName Failover Cluster..."
     $vagrantNetAdapter = Get-NetAdapter Vagrant
-    $clusterIgnoreNetwork = ($vagrantNetAdapter | Get-NetIPConfiguration).IPv4Address `
+    $clusterIgnoreNetworkCidr = ($vagrantNetAdapter | Get-NetIPConfiguration).IPv4Address `
         | Select-Object -First 1 `
         | ForEach-Object {
             "$($_.IPAddress -replace '\.\d+$','.0')/$($_.PrefixLength)"
         }
-    # TODO why -IgnoreNetwork does not seem to work? I can still see the network
-    #      being returned by Get-ClusterNetwork, and all the cluster networks
-    #      still seem to allow traffic.
+    $clusterIgnoreNetworkAddress = $clusterIgnoreNetworkCidr -replace '/.+',''
     # NB this will create the $clusterName AD Computer object.
     # NB to be the most compatible, it should have a length of 15 or less characters.
     New-Cluster `
         -Name $clusterName `
         -Node $env:COMPUTERNAME `
         -StaticAddress $clusterIpAddress `
-        -IgnoreNetwork $clusterIgnoreNetwork `
+        -IgnoreNetwork $clusterIgnoreNetworkCidr `
         -NoStorage `
         | Out-Null
 
@@ -48,6 +46,23 @@ if ($action -eq "create") {
     while (!(Get-Cluster -Name $clusterName -ErrorAction SilentlyContinue)) {
         Start-Sleep -Second 5
     }
+
+    Write-Host "Configuring the $clusterName Failover Cluster Network..."
+    Set-ClusterExcludedAdapter `
+        -ExclusionType IPPrefix `
+        -ExclusionValue $clusterIgnoreNetworkCidr
+    $vagrantClusterNetwork = Get-ClusterNetwork -Cluster $clusterName | Where-Object { $_.Address -eq $clusterIgnoreNetworkAddress }
+    $domainClusterNetwork  = Get-ClusterNetwork -Cluster $clusterName | Where-Object { $_.Address -ne $clusterIgnoreNetworkAddress }
+    $vagrantClusterNetwork.Name = 'Vagrant Cluster Network'
+    $vagrantClusterNetwork.Role = 'None'
+    $domainClusterNetwork.Name = 'Domain Cluster Network'
+    $domainClusterNetwork.Role = 'ClusterAndClient'
+    Get-ClusterResource -Cluster $clusterName `
+        | Where-Object { $_.ResourceType -eq 'IP Address' } `
+        | Where-Object {
+            ($_ | Get-ClusterParameter -Name Network).Value -ne $domainClusterNetwork.Name
+        } `
+        | Remove-ClusterResource -Force
 
     $clusterFileSharePath = "\\DC\fc-storage-${clusterName}"
     Write-Host "Setting the $clusterName Failover Cluster Quorum Share to $clusterFileSharePath..."
