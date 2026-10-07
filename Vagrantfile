@@ -21,7 +21,7 @@ PROVISION_ENV = {
 }
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "windows-2022-uefi-amd64"
+  config.vm.box = "windows-2025-uefi-amd64"
 
   config.vm.provider "libvirt" do |lv, config|
     lv.memory = 4*1024
