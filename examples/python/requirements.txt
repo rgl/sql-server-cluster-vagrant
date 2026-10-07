@@ -1,2 +1,2 @@
-# see https://pypi.org/project/pyodbc/
-pyodbc==5.3.0
+# see https://pypi.org/project/mssql-python/
+mssql-python==1.15.0
